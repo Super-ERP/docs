@@ -1,0 +1,36 @@
+name: docs-quality
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "pages/**/*"
+      - "apis/**/*"
+      - "catalog/**/*"
+      - "scripts/**/*"
+      - "package.json"
+      - "package-lock.json"
+  push:
+    branches: [main]
+    paths:
+      - "pages/**/*"
+      - "apis/**/*"
+      - "catalog/**/*"
+      - "scripts/**/*"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
