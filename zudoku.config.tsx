@@ -250,8 +250,8 @@ const config: ZudokuConfig = {
           label: "Extensibility",
           icon: "puzzle",
           items: [
-            { type: "doc", file: "extensibility/plugin-system", label: "Plugin contract" },
-            { type: "doc", file: "extensibility/overview", label: "Plugin registry" },
+            { type: "doc", file: "extensibility/plugin-system", label: "Plugin system" },
+            { type: "doc", file: "extensibility/overview", label: "Plugin overview" },
             { type: "doc", file: "extensibility/adding-a-module", label: "Adding a module" },
             { type: "doc", file: "extensibility/code-walkthrough", label: "Worked examples" },
           ],
@@ -264,7 +264,7 @@ const config: ZudokuConfig = {
       icon: "server",
       items: [
         { type: "doc", file: "api-guide", label: "Using the REST API", icon: "terminal" },
-        { type: "doc", file: "api-reference", label: "Architecture reference" },
+        { type: "doc", file: "api-reference", label: "Server actions & route handlers" },
         { type: "link", to: "/api-playground", label: "API playground", icon: "flask-conical" },
       ],
     },

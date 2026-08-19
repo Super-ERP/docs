@@ -1,20 +1,19 @@
----
-title: "Contributing to CRM v2"
----
+# Contributing to CRM v2
 
-This is the day-one guide. Read it once, then keep the
-[module (plugin) system](/extensibility/plugin-system) open while you work.
+This is the day-one guide. Read it once, then keep [`MODULES.md`](./MODULES.md)
+open while you work.
 
 > **Note:** the `apps/` workspace restructure has landed — the app now lives
 > under `apps/web/`, with the repo root as a thin pnpm workspace. `packages/`
-> and `modules/` are reserved in `pnpm-workspace.yaml` for later phases.
+> and `modules/` are reserved in `pnpm-workspace.yaml` for later phases — see
+> [the design spec](./docs/superpowers/specs/2026-07-17-monorepo-org-structure-design.md).
 > Only *where files live* changed; the five rules stay identical.
 
 ---
 
 ## 1. Get it running
 
-Follow **[README → Local development](/overview#local-development)**. Use
+Follow **[README → Local development](./README.md#local-development)**. Use
 `pnpm run db:setup-seeded` rather than `db:setup` — it gives you sample accounts,
 funnels, and quotations to click around, plus four extra logins.
 
@@ -25,11 +24,12 @@ run your own.
 
 | To learn… | Read |
 |---|---|
-| What the product does | [Repository overview](/overview) |
-| **The module (plugin) system** — read this before writing anything | [Plugin system](/extensibility/plugin-system) |
-| Running it in production, backups, DB access | [Operations](/operations) |
-| Past security/correctness findings | [`AUDIT.md`](https://github.com/Super-ERP/docs/blob/main/archive/design/AUDIT.md) |
-| Rules for AI coding agents | [`AGENTS.md`](https://github.com/Super-ERP/crm-v2/blob/main/AGENTS.md) |
+| What the product does | [README](./README.md) |
+| **The module (plugin) system** — read this before writing anything | [MODULES.md](./MODULES.md) |
+| Where the repo is heading (monorepo, teams, ownership) | [Design spec](./docs/superpowers/specs/2026-07-17-monorepo-org-structure-design.md) |
+| Running it in production, backups, DB access | [OPERATIONS.md](./OPERATIONS.md) |
+| Past security/correctness findings | [AUDIT.md](./AUDIT.md) |
+| Rules for AI coding agents | [AGENTS.md](./AGENTS.md) |
 
 Current layout — the repo root is a thin pnpm workspace; the app lives under
 `apps/web/`:
@@ -80,7 +80,7 @@ your code gets pulled in, you have a static edge to remove.
 
 **4 — Registration is explicit.**
 Module metadata, nav entries, and permission groups are hand-registered in core
-files ([`MODULES.md`](/extensibility/plugin-system) steps 1, 2, 5, 6). Do **not** add
+files ([`MODULES.md`](./MODULES.md) steps 1, 2, 5, 6). Do **not** add
 auto-discovery — a central registry that imports every module violates rule 3
 and drags disabled modules into the bundle.
 
@@ -95,7 +95,7 @@ a gated module.
 
 ## 4. Adding a module
 
-Follow the 10-step recipe in **[Plugin system → "Developer: add a brand-new module"](/extensibility/plugin-system)**.
+Follow the 10-step recipe in **[MODULES.md → "Developer: add a brand-new module"](./MODULES.md)**.
 Ship it with its flag `false`; a core maintainer turns it on.
 
 If you find yourself wanting to import another module's internals — **stop.**
@@ -151,18 +151,18 @@ why we stay in one repo.
 
 ## 7. Deploying
 
-Deployments are automated. Pushing to `staging` runs the quality gate and
+Deployments are automated. Pushing to `main` runs the quality gate and
 rebuilds the isolated staging stack; its temporary public URL is published in
 that workflow run's summary. Production is separate: create a signed release,
 then approve the `deploy-production` workflow. The normal path is **feature
-branch → `staging` → `main` → signed release → production approval**.
+branch → `main` → signed release → production approval**.
 
 ## 8. Status of the setup
 
 What's in place:
 
 - The public repo lives in the **`Super-ERP`** GitHub org, with `core` and
-  `ops` teams and `CODEOWNERS` routing reviews to them.
+  `ops` teams and `CODEOWNERS` routing reviews to them where assigned.
 - **CI runs on every PR** (`quality`: lint · typecheck · test · build) and the
   PR template lists the checklist above.
 
@@ -198,7 +198,7 @@ For a developer changing CRM code:
 
 For a partner integrating only through supported contracts:
 
-- Use the public [external developer guide](/external-developers/overview).
+- Use the public [external developer guide](https://github.com/Super-ERP/docs/tree/main/pages/external-developers/overview.mdx).
 - Receive a tenant-scoped API key from **Settings → API Keys**.
 - Use a staging or sandbox tenant, never production credentials.
 - Use the documented REST API and API playground.

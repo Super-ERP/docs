@@ -1,12 +1,10 @@
----
-title: "The module (plugin) system"
----
+# The module (plugin) system
 
 Everything beyond the **core CRM** (leads, accounts, contacts/persons,
 opportunities, funnel + stage-gated approvals, quotations, tax, products,
 pipeline dashboard, RBAC/Team) is an **optional plugin**, switched on or off
 for the whole deployment by **one boolean** in
-[`apps/web/modules.config.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/modules.config.ts).
+[`apps/web/modules.config.ts`](./apps/web/modules.config.ts).
 
 Guiding principle: **disable, don't delete.** A disabled plugin's nav, routes,
 server actions, and roles-matrix group all disappear, but its code, DB tables,
@@ -23,13 +21,13 @@ roles + permission-matrix editor + seniority tiers), `documentation`.
 
 | File | Role |
 |---|---|
-| [`apps/web/modules.config.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/modules.config.ts) | **The switches.** One boolean per plugin. Pure/import-free so client, server, next-free services, and seed scripts can all read it. |
-| [`apps/web/lib/modules.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/lib/modules.ts) | **The registry.** `ModuleId` type (auto-derived from the config keys), the `MODULES` metadata + **dependency graph**, and the gate functions: `isModuleEnabled` / `assertModuleEnabled` / `validateModuleConfig`. |
-| [`apps/web/lib/module-guard.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/lib/module-guard.ts) | **Route guard.** `requireModule(id)` → `redirect("/dashboard")` when the plugin is off. `server-only`. |
-| [`apps/web/lib/actions.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/lib/actions.ts) | **Action guard.** `withModule(id, permission, fn)` = `assertModuleEnabled` then the normal tenant/RLS-scoped `withTenant`. |
-| [`apps/web/instrumentation.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/instrumentation.ts) | **Boot check.** Runs `validateModuleConfig()` on startup and **refuses to boot** if a plugin is on but a dependency is off (in every environment, not just prod). |
-| Nav + permissions | [`apps/web/components/app-sidebar.tsx`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/components/app-sidebar.tsx), [`apps/web/components/command-palette.tsx`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/components/command-palette.tsx) tag items with `module?: ModuleId`; [`apps/web/lib/permissions.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/lib/permissions.ts) tags each roles-matrix group. All are filtered by `isModuleEnabled`. |
-| Product docs | [`catalog/modules.json`](https://github.com/Super-ERP/docs/blob/main/catalog/modules.json) registers every user-facing capability; its canonical page lives under `pages/product/<domain>/`. |
+| [`apps/web/modules.config.ts`](./apps/web/modules.config.ts) | **The switches.** One boolean per plugin. Pure/import-free so client, server, next-free services, and seed scripts can all read it. |
+| [`apps/web/lib/modules.ts`](./apps/web/lib/modules.ts) | **The registry.** `ModuleId` type (auto-derived from the config keys), the `MODULES` metadata + **dependency graph**, and the gate functions: `isModuleEnabled` / `assertModuleEnabled` / `validateModuleConfig`. |
+| [`apps/web/lib/module-guard.ts`](./apps/web/lib/module-guard.ts) | **Route guard.** `requireModule(id)` → `redirect("/dashboard")` when the plugin is off. `server-only`. |
+| [`apps/web/lib/actions.ts`](./apps/web/lib/actions.ts) | **Action guard.** `withModule(id, permission, fn)` = `assertModuleEnabled` then the normal tenant/RLS-scoped `withTenant`. |
+| [`apps/web/instrumentation.ts`](./apps/web/instrumentation.ts) | **Boot check.** Runs `validateModuleConfig()` on startup and **refuses to boot** if a plugin is on but a dependency is off (in every environment, not just prod). |
+| Nav + permissions | [`apps/web/components/app-sidebar.tsx`](./apps/web/components/app-sidebar.tsx), [`apps/web/components/command-palette.tsx`](./apps/web/components/command-palette.tsx) tag items with `module?: ModuleId`; [`apps/web/lib/permissions.ts`](./apps/web/lib/permissions.ts) tags each roles-matrix group. All are filtered by `isModuleEnabled`. |
+| Product docs | [`catalog/modules.json`](https://github.com/Super-ERP/docs/tree/main/catalog/modules.json) registers every user-facing capability; its canonical pages live under `pages/product/<domain>/` in `Super-ERP/docs`. |
 
 The dependency graph is code, not config, so operators can't misconfigure it:
 
@@ -43,7 +41,7 @@ finance      → projects, salesOrders
 
 ## Operator: enable/disable an existing module
 
-1. Edit [`apps/web/modules.config.ts`](https://github.com/Super-ERP/crm-v2/blob/main/apps/web/modules.config.ts) — set the flag (and any
+1. Edit [`apps/web/modules.config.ts`](./apps/web/modules.config.ts) — set the flag (and any
    dependencies it needs; the app validates this at boot).
 2. **Rebuild + redeploy** (`pnpm run build` + restart, or `docker compose up -d
    --build`). There is no per-tenant flag and no CLI — the config file is the
@@ -114,9 +112,10 @@ The "ingestion" recipe — every step is a small, local edit:
    the flag only gates *access*, never *data*.
 
 10. **Document and register the capability.** Add it to
-    `catalog/modules.json`, create its canonical page under
-    `pages/product/<domain>/<capability>.mdx`, and add that page to
-    `zudoku.config.tsx`. The page must explain business purpose,
+    [`catalog/modules.json`](https://github.com/Super-ERP/docs/tree/main/catalog/modules.json),
+    create its canonical page under `pages/product/<domain>/<capability>.mdx` in
+    `Super-ERP/docs`, and add that page to
+    [`zudoku.config.tsx`](https://github.com/Super-ERP/docs/tree/main/zudoku.config.tsx). The page must explain business purpose,
     workflow, records, permissions, dependencies, routes, source locations,
     tests, and operational behavior.
 
@@ -147,8 +146,8 @@ First decide whether the change is a **capability** or a **plugin**.
 | Plugin switch and dependencies | `apps/web/modules.config.ts`, `apps/web/lib/modules.ts` |
 | Navigation | `apps/web/components/app-sidebar.tsx`, `command-palette.tsx` |
 | Tests | `apps/web/tests/<capability>.test.ts` |
-| Product documentation | `pages/product/<domain>/<capability>.mdx` |
-| Documentation registry | `catalog/modules.json` and `zudoku.config.tsx` |
+| Product documentation | `pages/product/<domain>/<capability>.mdx` in `Super-ERP/docs` |
+| Documentation registry | `catalog/modules.json` in `Super-ERP/docs` and `zudoku.config.tsx` |
 
 The planned `modules/<name>/` workspace packages are not implemented yet.
 Until that restructure lands, new code follows the current `apps/web` layout.

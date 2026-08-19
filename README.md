@@ -7,25 +7,25 @@ workspace).
 ## Run locally
 
 ```bash
-cd docs-site
 npm install
 npm run dev        # local preview with hot reload
 npm run build      # static build → dist/
 npm run check:docs # verify every route/plugin has a registered product page
 ```
 
-## Single source of truth
+## Repository layout
 
-**Overview**, **Contributing**, and **Modules** are copied from the repository
-root at build time by `scripts/sync-root-docs.mjs` (wired as `predev`/`prebuild`).
-Edit the **root** files — `README.md`, `CONTRIBUTING.md`, `MODULES.md` — not
-`pages/overview.md`, `pages/contributing.md`, and
-`pages/extensibility/plugin-system.md` (those are regenerated copies).
+This repo is self-contained — all content is authored here directly.
 
-`pages/operations.mdx` and `pages/architecture.mdx` are authored here directly.
-The Operations page is a short public index. Detailed deployment and recovery
-commands remain in the public repository's `OPERATIONS.md` so one runbook stays
-canonical.
+- `pages/` — the published site (Zudoku navigates `pages/**/*.{md,mdx}`).
+  Product capability pages live under `pages/product/<domain>/`; developer,
+  codebase, API, and operations pages are authored here as well.
+- `archive/` — internal working documents that are **not** published: design
+  specs (`archive/specs/`), implementation plans (`archive/plans/`), and
+  operational runbooks (`archive/operations/`). They are kept in the repo for
+  history and reference, not rendered into the site.
+- `catalog/modules.json` — the coverage registry validated by `check:docs`.
+- `apis/crm-api.yaml` — the OpenAPI spec behind the API playground.
 
 ## Adding a product capability
 
@@ -46,16 +46,16 @@ stable contracts instead of CRM internals. It documents API usage, sandbox expec
 support flow, and the current read-only boundary. Do not publish server access,
 database credentials, restricted contributor instructions, or production secrets.
 
-Source contributors use the public repository's `CONTRIBUTING.md`; a fork is
-enough to open a pull request. Repository visibility never grants production,
-database, secret, or server access.
+Repository visibility never grants production, database, secret, or server
+access.
 
 ## Deploy to Vercel
 
 The `docs-quality` GitHub Actions workflow is the only production deployment
 mechanism. Do not run manual production deployments for routine releases.
 
-1. Create the Vercel project and set **Root Directory** = `docs-site`.
+1. Create the Vercel project and set **Root Directory** = the repository root (`.`) with
+   framework preset **Zudoku**.
 2. Add its token as the `VERCEL_TOKEN` GitHub Actions secret.
 3. Keep the Vercel organization and project IDs in `docs-quality.yml` aligned
    with that project.

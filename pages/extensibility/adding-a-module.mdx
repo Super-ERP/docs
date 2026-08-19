@@ -1,5 +1,5 @@
 ---
-title: Contributing
+title: "Adding a module"
 ---
 
 This is the technical recipe for adding a brand-new plugin `x` from scratch,
@@ -93,9 +93,9 @@ migrations and RLS, created **regardless** of the flag. Per "disable, don't
 delete," the flag only ever gates *access* — never *data* or *schema*.
 
 **10 — Document and register the capability.** Add it to
-`docs-site/catalog/modules.json`, create its canonical page under
-`docs-site/pages/product/<domain>/<capability>.mdx`, and add it to
-`docs-site/zudoku.config.tsx`.
+`catalog/modules.json`, create its canonical page under
+`pages/product/<domain>/<capability>.mdx`, and add it to
+`zudoku.config.tsx`.
 
 The page must cover business purpose, lifecycle position, workflow, records,
 permissions, plugin dependencies, routes, source map, tests, and operational
@@ -138,15 +138,15 @@ Create a new plugin only when the feature needs independent:
 | Plugin switch and dependencies | `apps/web/modules.config.ts`, `apps/web/lib/modules.ts` |
 | Navigation | `apps/web/components/app-sidebar.tsx`, `command-palette.tsx` |
 | Tests | `apps/web/tests/<capability>.test.ts` |
-| Product documentation | `docs-site/pages/product/<domain>/<capability>.mdx` |
-| Documentation registry | `docs-site/catalog/modules.json`, `zudoku.config.tsx` |
+| Product documentation | `pages/product/<domain>/<capability>.mdx` |
+| Documentation registry | `catalog/modules.json`, `zudoku.config.tsx` |
 
 For finance-style growth, keep each capability in its feature folder but reuse shared
 finance infra:
 
 - `/apps/web/app/(app)/billing` and `/app/(app)/purchasing` are **O2C / P2P** under
   the existing `finance` module.
-- Shared finance docs stay in `docs-site/pages/product/finance/`.
+- Shared finance docs stay in `pages/product/finance/`.
 - Shared tables/services are under `apps/web/db/schema/finance-docs.ts` and
   `apps/web/server/services/finance.ts`.
 - Add capability-specific helpers in `apps/web/server/services/<capability>.ts` only when

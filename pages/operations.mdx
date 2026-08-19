@@ -3,9 +3,9 @@ title: Operations
 category: ""
 ---
 
-How the Quandatics CRM is built and deployed, at a glance. The canonical
-operator runbook — release, recovery, backups, database admin, and hardening —
-lives in **`OPERATIONS.md` in the public repository**.
+How the Quandatics CRM is built and deployed, at a glance. The detailed
+runbooks — release, recovery, backups, database admin, and hardening — are
+archived in this repository under [`archive/operations/`](https://github.com/Super-ERP/docs/tree/main/archive/operations).
 
 ## Quick map
 
@@ -13,9 +13,9 @@ lives in **`OPERATIONS.md` in the public repository**.
 | --- | --- |
 | External API developer | [External developers](/external-developers/overview) |
 | Source contributor | [Contributing](/contributing) |
-| Version + release + failed deploy | [`OPERATIONS.md`](https://github.com/Super-ERP/crm-v2/blob/main/OPERATIONS.md) |
-| New production install | [`deploy/client/README.md`](https://github.com/Super-ERP/crm-v2/blob/main/deploy/client/README.md) |
-| Client, contract, deployment, entitlement | [`apps/control-plane/README.md`](https://github.com/Super-ERP/crm-v2/blob/main/apps/control-plane/README.md) |
+| Version + release + failed deploy | [`archive/operations/OPERATIONS.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/OPERATIONS.md) |
+| New production install | [`archive/operations/deploy-client-README.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/deploy-client-README.md) |
+| Client, contract, deployment, entitlement | [`archive/operations/control-plane-README.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/control-plane-README.md) |
 | Signed release history | [Release log](https://github.com/Super-ERP/crm-v2/blob/main/docs/operations/release-log.md) |
 
 ## Environments
@@ -101,7 +101,7 @@ release-control changes.
 
 Signing keys and signed envelopes stay hidden by design. Do not use direct D1 or
 host-state changes to work around the workspace. Full recovery commands
-remain in [`OPERATIONS.md`](https://github.com/Super-ERP/crm-v2/blob/main/OPERATIONS.md#operator-workspace-client-onboarding-and-signing).
+remain in [`archive/operations/OPERATIONS.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/OPERATIONS.md#operator-workspace-client-onboarding-and-signing).
 
 ## Failure checks
 
@@ -125,5 +125,6 @@ rebuild. See **[Modules](/extensibility/plugin-system)** for the full plugin sys
 ## Where the details live
 
 For operational commands — releases, entitlement recovery, database access,
-backups, restore, and hardening — read `OPERATIONS.md` in the repository. Never
-copy credentials or host-specific secrets into either documentation surface.
+backups, restore, and hardening — read the runbooks under
+[`archive/operations/`](https://github.com/Super-ERP/docs/tree/main/archive/operations).
+Never copy credentials or host-specific secrets into either documentation surface.

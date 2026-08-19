@@ -3,7 +3,7 @@ title: Architecture
 ---
 
 A short tour of how the codebase is organised and where it's heading. Full design
-specs live in `docs/superpowers/specs/` in the repository; these are summaries.
+specs are archived under [`archive/specs/`](https://github.com/Super-ERP/docs/tree/main/archive/specs) in this repository; these are summaries.
 
 ## One repository, module-by-module
 
@@ -17,6 +17,25 @@ quotations, tax, products, RBAC) is an **optional module** — a plugin switched
 or off by one boolean in `modules.config.ts`. See **[Modules](/extensibility/plugin-system)** for the
 plugin system and how to add one, and **[Contributing](/contributing)** for the
 rules that keep module boundaries clean.
+
+## Two surfaces: the CRM and the vendor distribution stack
+
+The repository runs two independent deployable surfaces that share contracts:
+
+- **`apps/web`** — the multitenant Next.js CRM. Routes, server actions, business
+  services, Drizzle schema, RLS, and the plugin system. See the
+  [Codebase guide](/codebase/overview).
+- **Vendor distribution stack** — a Cloudflare Worker control plane
+  (`apps/control-plane`) plus a client-hosted agent (`apps/deployment-agent`).
+  The control plane owns client/deployment metadata, commercial controls,
+  deployment identity, heartbeat rollups, and immutable signed entitlement
+  leases. The agent registers, heartbeats, applies signed entitlements, and
+  executes signed remote commands. Both share the `packages/control-protocol`
+  signing and command contracts.
+
+See **[Operations](/operations)** for the operator workspace and deploy flow, and
+[`archive/operations/control-plane-README.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/control-plane-README.md)
+for control-plane specifics.
 
 ## Settings
 
@@ -38,8 +57,16 @@ fully-namespaced stack on the same server) so changes can be previewed before
 they go live. Its public quick-tunnel URL is temporary and appears in the latest
 staging workflow summary. See **[Operations](/operations)** for the deploy flow.
 
+## Signed releases
+
+Client releases come from annotated strict SemVer tags. CI builds four images
+(web runtime, migrator, encrypted-backup runtime, deployment agent), scans them,
+signs each digest with GitHub OIDC and Cosign, and records them in one signed
+manifest. Production pulls only verified digests through the source-free
+`deploy/client/` bundle. See [Repository overview → Signed client release images](/overview#signed-client-release-images).
+
 ## The road ahead
 
 The repository is moving toward a workspace layout (`apps/` + `packages/` +
 `modules/`) so that many contributors can build modules in parallel with clear
-boundaries. The design for this lives in the repository's specs.
+boundaries. The design for this lives in the archived specs.
