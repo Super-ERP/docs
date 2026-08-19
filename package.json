@@ -11,10 +11,9 @@
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:e2e": "node tests/mermaid.e2e.mjs",
     "verify": "npm run lint && npm test && npm run build && npm run test:e2e",
-    "sync-docs": "node scripts/sync-root-docs.mjs",
     "check:docs": "node scripts/check-module-docs.mjs",
-    "predev": "node scripts/sync-root-docs.mjs",
-    "prebuild": "npm run sync-docs && npm run check:docs"
+    "predev": "npm run check:docs",
+    "prebuild": "npm run check:docs"
   },
   "dependencies": {
     "lucide-react": "1.16.0",

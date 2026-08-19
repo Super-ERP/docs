@@ -12,16 +12,15 @@ exact.
 
 ## Monorepo context
 
-The repo root is a **thin pnpm workspace**. There is exactly one app,
-`apps/web/`; `packages/` and `modules/` are reserved in
-`pnpm-workspace.yaml` for a later phase but hold nothing today. Root
-`package.json` scripts are all one-line delegations —
-`"build": "pnpm --filter web run build"` and similarly for `dev`, `lint`,
-`typecheck`, `test`, `db:migrate`, `db:setup`, `db:setup-seeded` — so local
-dev and CI commands run from the repo root without `cd apps/web`. This docs
-site (`docs-site/`) is a second, independent Vite/Zudoku workspace member; it
-has no runtime dependency on `apps/web` beyond reading its `MODULES.md` and
-`AGENTS.md` at build time (see `docs-site/scripts/sync-root-docs.mjs`).
+The repo root is a **thin pnpm workspace**. The app lives under `apps/web/`;
+`packages/` and `modules/` are reserved in `pnpm-workspace.yaml` for a later
+phase (today `packages/control-protocol` holds the shared signing contract used
+by the control plane and deployment agent). Root `package.json` scripts are all
+one-line delegations — `"build": "pnpm --filter web run build"` and similarly
+for `dev`, `lint`, `typecheck`, `test`, `db:migrate`, `db:setup`,
+`db:setup-seeded` — so local dev and CI commands run from the repo root without
+`cd apps/web`. This docs site is an independent repo (`Super-ERP/docs`); it has
+no build-time coupling to the application repository.
 
 Everything below refers to paths under `apps/web/` unless stated otherwise.
 
