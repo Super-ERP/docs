@@ -56,7 +56,7 @@ tenant-configurable.
 
 - Entering Commit or Won can seed payment milestones.
 - Winning turns a prospect account into a customer.
-- Quote acceptance can advance the funnel through the same stage service.
+- Quotation acceptance and Funnel stage advancement are separate actions.
 - Finance-enabled intercompany deals synchronize partner-side context.
 - Every movement writes immutable stage history and activity.
 
@@ -70,3 +70,9 @@ tenant-configurable.
 | Entry requirements | `apps/web/lib/stage-gate.ts` |
 | Schema | `apps/web/db/schema/pipeline.ts` |
 | API | `GET /api/v1/funnels`, `GET /api/v1/funnels/{id}` |
+
+## Deal value and Commit setup
+
+**Deal value (excl. tax)** shows the manual Funnel estimate first, including a recorded zero. **Estimated** identifies that source even if the Funnel has a primary quotation. Without an estimate, the list uses the stored deal value and identifies the primary quotation when available. Compare **Quoted amount** on the Funnel for the primary quotation’s net amount. All amounts use the record currency.
+
+When advancing to **4a — Commit**, choose **Generate new** or **Select existing** Project Code and review the primary quotation’s payment plan. Each billing row needs an expected invoice month and year. Multiple Funnels may share a code. An assigned code appears on the Funnel and linked Opportunity before Commit. Reassigning one Funnel and renaming a shared code have different scopes; shared renaming requires administrative access.

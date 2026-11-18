@@ -18,33 +18,18 @@ archived in this repository under [`archive/operations/`](https://github.com/Sup
 | Client, contract, deployment, entitlement | [`archive/operations/control-plane-README.md`](https://github.com/Super-ERP/docs/blob/main/archive/operations/control-plane-README.md) |
 | Signed release history | [Release log](https://github.com/Super-ERP/crm-v2/blob/main/docs/operations/release-log.md) |
 
-## Environments
+## Release and environments
 
-- **Production** — the live app, deployed from a signed SemVer release after approval.
-- **Staging** — an isolated stack built from the `staging` branch, so changes
-  can be reviewed before they reach production. Its Cloudflare quick-tunnel URL
-  changes on each redeploy and is published in the latest workflow summary.
+A successful quality run on main starts release tagging. The image workflow builds and signs the deployment bundle. Staging smoke-tests that exact release. A successful smoke test dispatches production with the release tag, image run ID and tested bundle checksum. Production verifies the signed bundle, applies migrations and checks service health.
 
-The flow is: **feature branch → `staging` → `main` → signed release → production approval**.
+The staging smoke test is an isolated release check. A persistent reviewer site needs its own enrollment, database and HTTPS route. A passing smoke test does not provide a permanent staging URL.
 
-## How a deploy works
-
-Every release follows the same gate:
-
-1. A **quality gate** runs on a GitHub-hosted runner — lint, typecheck, tests,
-   and a production build. A pull request must pass it before merge.
-2. Vendor CI builds four immutable images, scans them, emits SBOM evidence, and
-   signs each digest with GitHub OIDC and Cosign.
-3. The protected production workflow downloads only the source-free client
-   bundle, verifies vendor signatures, migrates, checks health, and rolls back
-   if a required gate fails. Production never builds application source.
-
-Staging remains an isolated source build from its own branch and temporary URL.
+For v1.2.204, the image job succeeded but the automatic smoke workflow did not start. Operators dispatched **deploy-staging** with the successful image run ID. Production promotion then completed automatically. Before retrying a release, check existing staging and production runs and the deployed version to avoid duplicate deployments.
 
 ## Versioning and signing
 
 - Release tags use strict `vMAJOR.MINOR.PATCH` SemVer and never move.
-- Use the one-command release helper from clean, reviewed `main`.
+- Normal releases are tagged by the release workflow after quality passes on main.
 - Four image digests are scanned, given SBOM/provenance, signed through GitHub
   OIDC + Cosign, then recorded in one signed source-free bundle.
 - Production accepts manifest digests only. Never deploy `latest` or build source

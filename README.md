@@ -49,19 +49,8 @@ database credentials, restricted contributor instructions, or production secrets
 Repository visibility never grants production, database, secret, or server
 access.
 
-## Deploy to Vercel
+## Verify and publish documentation
 
-The `docs-quality` GitHub Actions workflow is the only production deployment
-mechanism. Do not run manual production deployments for routine releases.
+The docs-quality workflow verifies changes to published pages on pull requests and pushes to main. It runs npm ci, lint, tests and the static build. The checked-in workflow contains no deployment job. Verify the hosting integration and the published page separately before announcing a site update.
 
-1. Create the Vercel project and set **Root Directory** = the repository root (`.`) with
-   framework preset **Zudoku**.
-2. Add its token as the `VERCEL_TOKEN` GitHub Actions secret.
-3. Keep the Vercel organization and project IDs in `docs-quality.yml` aligned
-   with that project.
-
-Pull requests must pass the `docs-quality` verification job before merge. After
-the change reaches `main`, that same workflow verifies the merge commit and
-creates exactly one production deployment from the checked-out source.
-If GitHub does not emit the expected push run, manually dispatch `docs-quality`;
-the workflow still verifies `main` before deploying.
+The GitBook user manual is maintained separately in the [CRM GitBook sync branch](https://github.com/Super-ERP/crm-v2/tree/gitbook-sync). Its site manifest maps Getting Started, Documentation, Reference and Changelog to their respective directories.
