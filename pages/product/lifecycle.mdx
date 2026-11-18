@@ -28,7 +28,8 @@ flowchart TD
 
   lead --> qualified
   qualified -- No --> disqualified
-  qualified -- Yes --> converted
+  qualified -- Yes --> review[Independent account review]
+  review -- Approved --> converted
   converted --> account
   converted --> contact
   converted --> opportunity
@@ -37,7 +38,7 @@ flowchart TD
   approval -- Approved or not required --> quote
   quote --> won
   won -- No --> funnel
-  won -- Yes --> milestone
+  quote --> milestone
   won -- Yes --> project
   project --> order
   order --> o2c

@@ -20,7 +20,9 @@ correct.
 ```mermaid
 stateDiagram-v2
   [*] --> Draft
-  Draft --> Sent
+  Draft --> PendingApproval
+  PendingApproval --> Approved
+  Approved --> Sent
   Sent --> Accepted
   Sent --> Rejected
   Sent --> Expired
@@ -38,8 +40,8 @@ stateDiagram-v2
   are computed centrally.
 - Tax rate and tax-inclusive mode are snapshotted so later settings changes do
   not alter issued documents.
-- Acceptance can move the Funnel and can create a Project when that plugin is
-  enabled.
+- An eligible Sent quotation can be accepted at any Funnel stage, including Closed Won. Acceptance makes it primary. It must still be valid and the Funnel can have only one accepted quotation.
+- **Set primary** is also available for a draft. It updates the Funnel’s quoted net value and linked products.
 
 ## Code map
 
